@@ -10,6 +10,7 @@
 
     <color name="red">#cb1412</color>
     <color name="darkRed">#7b0408</color>
+    <color name="hibiscus">#b53759</color>
 
     <color name="backgroundColor">#EFEFEF</color>
 </resources>

@@ -23,10 +23,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
         <activity
-            android:name=".MapActivity"
+            android:name=".view.MapActivity"
             android:theme="@style/Theme.App.NoActionBar"
             android:label="@string/title_activity_map" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

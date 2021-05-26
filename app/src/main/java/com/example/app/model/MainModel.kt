@@ -1,45 +1,29 @@
-package com.example.app
+package com.example.app.model
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.Toast
+import android.content.Context
 import com.example.app.database.AppDatabase
 import com.example.app.database.dto.DataDB
 import com.example.app.database.dto.EntityDB
 import com.example.app.database.dto.StatusDB
-import com.example.app.databinding.ActivityMainBinding
+import com.example.app.network.DataApiRepository
+import com.example.app.network.Network
+import com.example.app.recycler.RecyclerItemType
 import com.example.app.recycler.dto.RecyclerDataItem
 import com.example.app.recycler.dto.RecyclerEntityItem
 import com.example.app.recycler.dto.RecyclerItem
-import com.example.app.network.DataApiRepository
-import com.example.app.network.Network
-import com.example.app.network.dto.entity.EntityDTO
-import com.example.app.network.dto.status.StatusDTO
-import com.example.app.recycler.DataRecyclerAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainActivity : AppCompatActivity() {
+class MainModel(private val app: Context) {
 
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val api = DataApiRepository(Network.retrofit)
-    private val database by lazy { AppDatabase.getDatabase(applicationContext) }
-    private lateinit var recyclerDataList: List<RecyclerItem>
+    private val database = AppDatabase.getDatabase(app)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
-        GlobalScope.launch(Dispatchers.Main) {
-            recyclerDataList = when(Network.isOnline(applicationContext)){
-                true -> getDataFromServer()
-                false -> getDataFromDatabase()
-            }
-            val recyclerAdapter = DataRecyclerAdapter(applicationContext, recyclerDataList)
-            binding.dataRecyclerView.adapter = recyclerAdapter
-        }
+    suspend fun getData() = when(Network.isOnline(app)){
+            true -> getDataFromServer()
+            false -> getDataFromDatabase()
     }
 
     private suspend fun getDataFromServer(): List<RecyclerItem> {
@@ -53,16 +37,17 @@ class MainActivity : AppCompatActivity() {
         dataList.add(RecyclerItem(RecyclerEntityItem(entity.name, entity.location.latitude, entity.location.longitude)))
         entity.objects.mainObject.forEach { currentObject ->
             val tagsList = statuses
-                    .filter { it.status.objectId == currentObject.objectId }
-                    .map { it.status.tag.toString() }
+                .filter { it.status.objectId == currentObject.objectId }
+                .map { it.status.tag.toString() }
 
-            dataList.add(RecyclerItem(
-                    RecyclerDataItem(
-                            currentObject.objectId,
-                            currentObject.name,
-                            currentObject.title,
-                            tagsList)
-                    )
+            dataList.add(
+                RecyclerItem(
+                RecyclerDataItem(
+                    currentObject.objectId,
+                    currentObject.name,
+                    currentObject.title,
+                    tagsList)
+            )
             )
         }
         cacheData(dataList)
@@ -78,12 +63,12 @@ class MainActivity : AppCompatActivity() {
             var entityUid = ""
             dataList.forEach {
                 when(it.type) {
-                    AppConst.TYPE_ENTITY -> {
+                    RecyclerItemType.ENTITY.type -> {
                         val newEntity = EntityDB(it.entity!!.name, it.entity!!.latitude, it.entity!!.longitude)
                         database.entitiesDao().addEntity(newEntity)
                         entityUid = newEntity.uid
                     }
-                    AppConst.TYPE_DATA -> {
+                    RecyclerItemType.DATA.type -> {
                         val newObject = DataDB(it.data!!.name, it.data!!.title, entityUid, it.data!!.id)
                         database.dataDao().addData(newObject)
 
@@ -98,7 +83,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun getDataFromDatabase(): List<RecyclerItem> {
-        Toast.makeText(this@MainActivity, "Cannot refresh objects", Toast.LENGTH_LONG).show()
 
         val  dataList = mutableListOf<RecyclerItem>()
         val entity = withContext(Dispatchers.IO) {
@@ -115,16 +99,17 @@ class MainActivity : AppCompatActivity() {
             val entityObjects = objects.filter { it.entityId == entity.uid }
             entityObjects.forEach { currentObject ->
                 val tagsList = statuses
-                        .filter { it.objectId == currentObject.objectId }
-                        .map { it.tag }
+                    .filter { it.objectId == currentObject.objectId }
+                    .map { it.tag }
 
-                dataList.add(RecyclerItem(
-                                RecyclerDataItem(
-                                        currentObject.objectId,
-                                        currentObject.name,
-                                        currentObject.title,
-                                        tagsList)
-                                )
+                dataList.add(
+                    RecyclerItem(
+                    RecyclerDataItem(
+                        currentObject.objectId,
+                        currentObject.name,
+                        currentObject.title,
+                        tagsList)
+                )
                 )
             }
         }

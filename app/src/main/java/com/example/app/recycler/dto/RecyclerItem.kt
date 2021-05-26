@@ -1,19 +1,19 @@
 package com.example.app.recycler.dto
 
-import com.example.app.AppConst
+import com.example.app.recycler.RecyclerItemType as itemType
 
 class RecyclerItem{
-    var type: Int = 0
+    var type: Int
     var entity: RecyclerEntityItem? = null
     var data: RecyclerDataItem? = null
 
     internal constructor(entity: RecyclerEntityItem?) {
         this.entity = entity
-        type = AppConst.TYPE_ENTITY
+        type = itemType.ENTITY.type
     }
 
     internal constructor(data: RecyclerDataItem?) {
         this.data = data
-        type = AppConst.TYPE_DATA
+        type = itemType.DATA.type
     }
 }
