@@ -3,6 +3,7 @@ package com.example.app.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -33,6 +34,12 @@ class MainActivity : AppCompatActivity(), IMainActivity {
 
         model.isLoading.observe(this) {
             binding.dataProgressBar.isVisible = it
+        }
+
+        model.isOnline.observe(this) {
+            if (!it) {
+                Toast.makeText(this, getString(R.string.badConnection), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

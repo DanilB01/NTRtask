@@ -21,7 +21,9 @@ class MainModel(private val app: Context) {
     private val api = DataApiRepository(Network.retrofit)
     private val database = AppDatabase.getDatabase(app)
 
-    suspend fun getData() = when(Network.isOnline(app)){
+    fun isOnline() = Network.isOnline(app)
+
+    suspend fun getData() = when(isOnline()){
             true -> getDataFromServer()
             false -> getDataFromDatabase()
     }

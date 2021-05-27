@@ -2,6 +2,7 @@ package com.example.app.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.example.app.R
 import com.example.app.adapter.MapInfoWindowAdapter
@@ -29,6 +30,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val dataJson = intent.getStringExtra(getString(R.string.dataIntentKey))
         model.setInfo(dataJson)
+
+        model.isOnline.observe(this) {
+            if(!it){
+                Toast.makeText(this, getString(R.string.badConnection), Toast.LENGTH_SHORT).show()
+            }
+        }
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment

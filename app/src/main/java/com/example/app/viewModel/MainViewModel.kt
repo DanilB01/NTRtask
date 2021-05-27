@@ -22,8 +22,12 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
     private var _isLoading: MutableLiveData<Boolean> = MutableLiveData()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private var _isOnline: MutableLiveData<Boolean> = MutableLiveData()
+    val isOnline: LiveData<Boolean> = _isOnline
+
     init {
         setData()
+        _isOnline.value = mainModel.isOnline()
     }
 
     private fun setData() {

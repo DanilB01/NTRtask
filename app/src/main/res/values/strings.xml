@@ -4,4 +4,5 @@
     <string name="dataIntentKey">data</string>
     <string name="latitude">Latitude:</string>
     <string name="longitude">Longitude:</string>
+    <string name="badConnection">Bad connection</string>
 </resources>
