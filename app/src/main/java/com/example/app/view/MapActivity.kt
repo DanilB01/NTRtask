@@ -22,13 +22,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val model: MapViewModel by viewModels()
     private lateinit var mMap: GoogleMap
-    //private lateinit var data: Data
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
-        val dataJson = intent.getStringExtra("data")
+        val dataJson = intent.getStringExtra(getString(R.string.dataIntentKey))
         model.setInfo(dataJson)
 
         val mapFragment = supportFragmentManager

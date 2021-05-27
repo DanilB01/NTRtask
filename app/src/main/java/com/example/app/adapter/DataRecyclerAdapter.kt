@@ -57,7 +57,7 @@ class DataRecyclerAdapter(private val activity: IMainActivity): RecyclerView.Ada
                     ItemDataBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 DataViewHolder(itemBinding)
             }
-            else -> throw Exception("View type $viewType not found")
+            else -> throw Exception(getException(viewType))
         }
     }
 
@@ -66,6 +66,10 @@ class DataRecyclerAdapter(private val activity: IMainActivity): RecyclerView.Ada
             RecyclerItemType.DATA.type -> (holder as DataViewHolder).bind(dataList[position].data!!, activity)
             RecyclerItemType.ENTITY.type -> (holder as EntityViewHolder).bind(dataList[position].entity!!)
         }
+    }
+
+    companion object{
+        private fun getException(viewType:Int) = "View type $viewType not found"
     }
 
 }

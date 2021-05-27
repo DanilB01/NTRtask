@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), IMainActivity {
     override fun openMaps(data: Data) {
         val dataJson = Gson().toJson(data)
         val intent = Intent(this, MapActivity::class.java)
-        intent.putExtra("data", dataJson)
+        intent.putExtra(getString(R.string.dataIntentKey), dataJson)
         startActivity(intent)
     }
 }

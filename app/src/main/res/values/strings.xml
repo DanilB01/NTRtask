@@ -1,4 +1,7 @@
 <resources>
     <string name="appName">Test Project</string>
     <string name="title_activity_map">Map</string>
+    <string name="dataIntentKey">data</string>
+    <string name="latitude">Latitude:</string>
+    <string name="longitude">Longitude:</string>
 </resources>

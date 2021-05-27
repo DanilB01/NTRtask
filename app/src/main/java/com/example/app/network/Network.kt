@@ -13,6 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object Network {
+    private val url = "https://dl.dropboxusercontent.com/s/"
     val interceptor: HttpLoggingInterceptor by lazy {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.apply {
@@ -22,7 +23,7 @@ object Network {
     private val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
     val retrofit: DataApi by lazy {
         Retrofit.Builder()
-                .baseUrl("https://dl.dropboxusercontent.com/s/")
+                .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
                 .client(client)
                 .build()
@@ -37,16 +38,9 @@ object Network {
                     connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             if (capabilities != null) {
                 when {
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
-                        Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
-                        return true
-                    }
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
-                        Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
-                        return true
-                    }
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
-                        Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
                         return true
                     }
                 }

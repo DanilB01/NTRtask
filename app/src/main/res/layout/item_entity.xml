@@ -17,10 +17,7 @@
             android:id="@+id/entityTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold"
+            style="@style/mainTextStyle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,8 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Latitude:"
-            android:textSize="18sp"
+            android:text="@string/latitude"
+            style="@style/parametersTextStyle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/entityTextView" />
 
@@ -39,8 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="TextView"
-            android:textSize="18sp"
+            style="@style/parametersTextStyle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/latitudeLabelTextView"
             app:layout_constraintTop_toTopOf="@+id/latitudeLabelTextView" />
@@ -50,8 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Longitude:"
-            android:textSize="18sp"
+            android:text="@string/longitude"
+            style="@style/parametersTextStyle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/latitudeTextView" />
 
@@ -60,8 +56,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="TextView"
-            android:textSize="18sp"
+            style="@style/parametersTextStyle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/longitudeLabelTextView"
             app:layout_constraintTop_toTopOf="@+id/longitudeLabelTextView" />
