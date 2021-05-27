@@ -1,18 +1,20 @@
 package com.example.app.recycler.dto
 
+import com.example.app.data.Data
+import com.example.app.data.Entity
 import com.example.app.recycler.RecyclerItemType as itemType
 
 class RecyclerItem{
     var type: Int
-    var entity: RecyclerEntityItem? = null
-    var data: RecyclerDataItem? = null
+    var entity: Entity? = null
+    var data: Data? = null
 
-    internal constructor(entity: RecyclerEntityItem?) {
+    internal constructor(entity: Entity?) {
         this.entity = entity
         type = itemType.ENTITY.type
     }
 
-    internal constructor(data: RecyclerDataItem?) {
+    internal constructor(data: Data?) {
         this.data = data
         type = itemType.DATA.type
     }

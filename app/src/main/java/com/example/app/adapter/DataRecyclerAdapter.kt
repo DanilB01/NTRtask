@@ -1,17 +1,18 @@
-package com.example.app.recycler
+package com.example.app.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app.databinding.ItemDataBinding
 import com.example.app.databinding.ItemEntityBinding
-import com.example.app.recycler.dto.RecyclerDataItem
-import com.example.app.recycler.dto.RecyclerEntityItem
-import com.example.app.recycler.dto.RecyclerItem
-import java.lang.Exception
+import com.example.app.data.Data
+import com.example.app.data.Entity
 import com.example.app.recycler.RecyclerItemType
+import com.example.app.recycler.dto.RecyclerItem
+import com.example.app.view.IMainActivity
+import java.lang.Exception
 
-class DataRecyclerAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class DataRecyclerAdapter(private val activity: IMainActivity): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val dataList = mutableListOf<RecyclerItem>()
 
@@ -22,19 +23,21 @@ class DataRecyclerAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     class DataViewHolder(private val itemBinding: ItemDataBinding): RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(dataItem: RecyclerDataItem){
-            itemBinding.nameTextView.text = dataItem.name
-            itemBinding.titleTextView.text = dataItem.title
-            //itemBinding.tagsTextView.text = dataItem.tags.joinToString(separator = "\n")
-            itemBinding.tagRatingBar.rating = dataItem.tags.size.toFloat()
+        fun bind(data: Data, activity: IMainActivity){
+            itemBinding.nameTextView.text = data.name
+            itemBinding.titleTextView.text = data.title
+            itemBinding.tagRatingBar.rating = data.tags.size.toFloat()
+            itemBinding.itemCardView.setOnClickListener {
+                activity.openMaps(data)
+            }
         }
     }
 
     class EntityViewHolder(private val itemBinding: ItemEntityBinding): RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(dataItem: RecyclerEntityItem) {
-            itemBinding.entityTextView.text = dataItem.name
-            itemBinding.latitudeTextView.text = dataItem.latitude.toString()
-            itemBinding.longitudeTextView.text = dataItem.longitude.toString()
+        fun bind(data: Entity) {
+            itemBinding.entityTextView.text = data.name
+            itemBinding.latitudeTextView.text = data.latitude.toString()
+            itemBinding.longitudeTextView.text = data.longitude.toString()
         }
     }
 
@@ -60,7 +63,7 @@ class DataRecyclerAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(dataList[position].type){
-            RecyclerItemType.DATA.type -> (holder as DataViewHolder).bind(dataList[position].data!!)
+            RecyclerItemType.DATA.type -> (holder as DataViewHolder).bind(dataList[position].data!!, activity)
             RecyclerItemType.ENTITY.type -> (holder as EntityViewHolder).bind(dataList[position].entity!!)
         }
     }

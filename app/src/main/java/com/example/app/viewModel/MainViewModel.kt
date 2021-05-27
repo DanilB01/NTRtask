@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.app.data.Data
+import com.example.app.data.Entity
 import com.example.app.model.MainModel
 import com.example.app.recycler.dto.RecyclerItem
 import kotlinx.coroutines.Dispatchers

@@ -1,6 +1,6 @@
-package com.example.app.recycler.dto
+package com.example.app.data
 
-data class RecyclerEntityItem(
+data class Entity(
     val name:String,
     val latitude: Float,
     val longitude: Float

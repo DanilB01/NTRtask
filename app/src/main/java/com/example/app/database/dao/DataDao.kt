@@ -16,4 +16,7 @@ interface DataDao {
 
     @Query("SELECT * FROM data")
     fun getAllObjects(): List<DataDB>
+
+    @Query("SELECT * FROM data WHERE uid = :uid")
+    fun getObject(uid: String): DataDB
 }

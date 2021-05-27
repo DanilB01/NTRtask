@@ -8,8 +8,8 @@ import com.example.app.database.dto.StatusDB
 import com.example.app.network.DataApiRepository
 import com.example.app.network.Network
 import com.example.app.recycler.RecyclerItemType
-import com.example.app.recycler.dto.RecyclerDataItem
-import com.example.app.recycler.dto.RecyclerEntityItem
+import com.example.app.data.Data
+import com.example.app.data.Entity
 import com.example.app.recycler.dto.RecyclerItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -34,7 +34,7 @@ class MainModel(private val app: Context) {
         val statuses = withContext(Dispatchers.IO) {
             api.getStatuses()
         }
-        dataList.add(RecyclerItem(RecyclerEntityItem(entity.name, entity.location.latitude, entity.location.longitude)))
+        dataList.add(RecyclerItem(Entity(entity.name, entity.location.latitude, entity.location.longitude)))
         entity.objects.mainObject.forEach { currentObject ->
             val tagsList = statuses
                 .filter { it.status.objectId == currentObject.objectId }
@@ -42,16 +42,22 @@ class MainModel(private val app: Context) {
 
             dataList.add(
                 RecyclerItem(
-                RecyclerDataItem(
+                Data(
                     currentObject.objectId,
                     currentObject.name,
                     currentObject.title,
-                    tagsList)
+                    tagsList,
+                    Entity(
+                            entity.name,
+                            entity.location.latitude,
+                            entity.location.longitude
+                    )
+                )
             )
             )
         }
         cacheData(dataList)
-        return dataList
+        return sortData(dataList)
     }
 
     private fun cacheData(dataList: List<RecyclerItem>){
@@ -95,7 +101,7 @@ class MainModel(private val app: Context) {
             database.statusesDao().getAllStatuses()
         }
         if(entity != null) {
-            dataList.add(RecyclerItem(RecyclerEntityItem(entity.name, entity.latitude, entity.longitude)))
+            dataList.add(RecyclerItem(Entity(entity.name, entity.latitude, entity.longitude)))
             val entityObjects = objects.filter { it.entityId == entity.uid }
             entityObjects.forEach { currentObject ->
                 val tagsList = statuses
@@ -104,15 +110,23 @@ class MainModel(private val app: Context) {
 
                 dataList.add(
                     RecyclerItem(
-                    RecyclerDataItem(
+                    Data(
                         currentObject.objectId,
                         currentObject.name,
                         currentObject.title,
-                        tagsList)
+                        tagsList,
+                        Entity(
+                                entity.name,
+                                entity.latitude,
+                                entity.longitude
+                        )
+                    )
                 )
                 )
             }
         }
-        return dataList
+        return sortData(dataList)
     }
+
+    private fun sortData(dataList: List<RecyclerItem>) = dataList.sortedWith(compareBy( {it.data?.getMinTag()}, {it.data?.name}, {it.data?.title} ))
 }

@@ -1,5 +1,6 @@
 package com.example.app.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -7,14 +8,16 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.example.app.viewModel.MainViewModel
 import com.example.app.R
+import com.example.app.data.Data
 import com.example.app.databinding.ActivityMainBinding
-import com.example.app.recycler.DataRecyclerAdapter
+import com.example.app.adapter.DataRecyclerAdapter
+import com.google.gson.Gson
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), IMainActivity {
 
     private lateinit var binding: ActivityMainBinding
     private val model: MainViewModel by viewModels()
-    private val recyclerAdapter = DataRecyclerAdapter()
+    private val recyclerAdapter = DataRecyclerAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,5 +34,12 @@ class MainActivity : AppCompatActivity() {
         model.isLoading.observe(this) {
             binding.dataProgressBar.isVisible = it
         }
+    }
+
+    override fun openMaps(data: Data) {
+        val dataJson = Gson().toJson(data)
+        val intent = Intent(this, MapActivity::class.java)
+        intent.putExtra("data", dataJson)
+        startActivity(intent)
     }
 }
